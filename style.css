@@ -1,0 +1,47 @@
+/* Custom styles for better visual appeal and overrides */
+body {
+    font-family: 'Inter', sans-serif; /* Using Inter font */
+    background-color: #f0f2f5; /* Light gray background */
+}
+.note-input-area {
+    min-height: 150px; /* Minimum height for the editable area */
+    border: 1px solid #d1d5db; /* Light gray border */
+    outline: none; /* Remove default outline */
+    padding: 1rem; /* Padding inside the editable area */
+    border-radius: 0.5rem; /* Rounded corners */
+    background-color: #ffffff; /* White background */
+    transition: border-color 0.2s ease-in-out; /* Smooth transition for focus */
+}
+.note-input-area:focus {
+    border-color: #3b82f6; /* Blue border on focus */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25); /* Light blue shadow on focus */
+}
+.note-item {
+    background-color: #ffffff; /* White background for notes */
+    border-radius: 0.5rem; /* Rounded corners */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 1.25rem; /* Padding inside notes */
+    margin-bottom: 1rem; /* Space between notes */
+    word-wrap: break-word; /* Ensure long words break */
+}
+.note-item img {
+    max-width: 100%; /* Ensure images don't overflow */
+    height: auto; /* Maintain aspect ratio */
+    margin-top: 1rem; /* Space above images */
+    border-radius: 0.375rem; /* Slightly rounded corners for images */
+}
+/* Style for the scrollbar (optional, but good for aesthetics) */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f0f2f5;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
