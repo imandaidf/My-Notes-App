@@ -73,11 +73,14 @@ window.onload = function() {
      * @param {number} index The index of the note to delete.
      */
     function deleteNote(index) {
-        let notes = loadNotes();
-        if (index > -1 && index < notes.length) {
-            notes.splice(index, 1); // Remove the note
-            saveNotes(notes); // Save updated notes
-            renderNotes(); // Re-render the notes list
+        // Show confirmation dialog before deleting
+        if (confirm("Are you sure you want to delete this note?")) {
+            let notes = loadNotes();
+            if (index > -1 && index < notes.length) {
+                notes.splice(index, 1); // Remove the note
+                saveNotes(notes); // Save updated notes
+                renderNotes(); // Re-render the notes list
+            }
         }
     }
 
