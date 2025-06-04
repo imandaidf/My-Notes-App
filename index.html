@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Notes App</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for better visual appeal and overrides */
+        body {
+            font-family: 'Inter', sans-serif; /* Using Inter font */
+            background-color: #f0f2f5; /* Light gray background */
+        }
+        .note-input-area {
+            min-height: 150px; /* Minimum height for the editable area */
+            border: 1px solid #d1d5db; /* Light gray border */
+            outline: none; /* Remove default outline */
+            padding: 1rem; /* Padding inside the editable area */
+            border-radius: 0.5rem; /* Rounded corners */
+            background-color: #ffffff; /* White background */
+            transition: border-color 0.2s ease-in-out; /* Smooth transition for focus */
+        }
+        .note-input-area:focus {
+            border-color: #3b82f6; /* Blue border on focus */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25); /* Light blue shadow on focus */
+        }
+        .note-item {
+            background-color: #ffffff; /* White background for notes */
+            border-radius: 0.5rem; /* Rounded corners */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            padding: 1.25rem; /* Padding inside notes */
+            margin-bottom: 1rem; /* Space between notes */
+            word-wrap: break-word; /* Ensure long words break */
+        }
+        .note-item img {
+            max-width: 100%; /* Ensure images don't overflow */
+            height: auto; /* Maintain aspect ratio */
+            margin-top: 1rem; /* Space above images */
+            border-radius: 0.375rem; /* Slightly rounded corners for images */
+        }
+        /* Style for the scrollbar (optional, but good for aesthetics) */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f0f2f5;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-3xl mx-auto bg-white p-6 md:p-8 rounded-xl shadow-lg">
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-6 text-center">My Notes</h1>
+
+        <!-- Note Input Section -->
+        <div class="mb-8 p-6 bg-gray-50 rounded-lg shadow-inner">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Add New Note</h2>
+            <div
+                id="noteInputArea"
+                contenteditable="true"
+                class="note-input-area w-full text-gray-700 text-lg focus:ring-2 focus:ring-blue-300 focus:border-blue-500"
+                placeholder="Type your note here or drag & drop an image..."
+            ></div>
+            <button
+                id="addNoteBtn"
+                class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
+            >
+                Add Note
+            </button>
+        </div>
+
+        <!-- Notes Display Section -->
+        <div>
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Your Notes</h2>
+            <div id="notesContainer" class="space-y-4">
+                <!-- Notes will be loaded here -->
+            </div>
+            <p id="noNotesMessage" class="text-gray-500 text-center mt-8 hidden">No notes yet. Start by adding one above!</p>
+        </div>
+    </div>
+
+    <script>
+        // Ensure the DOM is fully loaded before running the script
+        window.onload = function() {
+            const noteInputArea = document.getElementById('noteInputArea');
+            const addNoteBtn = document.getElementById('addNoteBtn');
+            const notesContainer = document.getElementById('notesContainer');
+            const noNotesMessage = document.getElementById('noNotesMessage');
+
+            // Key for storing notes in localStorage
+            const NOTES_STORAGE_KEY = 'myNotesApp_notes';
+
+            /**
+             * Loads notes from localStorage.
+             * @returns {Array<string>} An array of HTML strings representing notes.
+             */
+            function loadNotes() {
+                try {
+                    const notesJson = localStorage.getItem(NOTES_STORAGE_KEY);
+                    return notesJson ? JSON.parse(notesJson) : [];
+                } catch (e) {
+                    console.error("Error loading notes from localStorage:", e);
+                    return [];
+                }
+            }
+
+            /**
+             * Saves notes to localStorage.
+             * @param {Array<string>} notes An array of HTML strings to save.
+             */
+            function saveNotes(notes) {
+                try {
+                    localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(notes));
+                } catch (e) {
+                    console.error("Error saving notes to localStorage:", e);
+                }
+            }
+
+            /**
+             * Renders all notes from the loaded notes array into the DOM.
+             */
+            function renderNotes() {
+                const notes = loadNotes();
+                notesContainer.innerHTML = ''; // Clear existing notes
+
+                if (notes.length === 0) {
+                    noNotesMessage.classList.remove('hidden');
+                } else {
+                    noNotesMessage.classList.add('hidden');
+                    notes.forEach((noteHtml, index) => {
+                        const noteDiv = document.createElement('div');
+                        noteDiv.classList.add('note-item');
+                        // Set innerHTML directly as notes can contain HTML (text and images)
+                        noteDiv.innerHTML = noteHtml;
+
+                        // Add a delete button to each note
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.textContent = 'Delete';
+                        deleteBtn.classList.add(
+                            'mt-4', 'ml-auto', 'block', 'bg-red-500', 'hover:bg-red-600',
+                            'text-white', 'font-bold', 'py-2', 'px-4', 'rounded-md',
+                            'transition', 'duration-200', 'ease-in-out', 'focus:outline-none',
+                            'focus:ring-2', 'focus:ring-red-400', 'focus:ring-opacity-75'
+                        );
+                        deleteBtn.onclick = () => deleteNote(index);
+                        noteDiv.appendChild(deleteBtn);
+
+                        notesContainer.appendChild(noteDiv);
+                    });
+                }
+            }
+
+            /**
+             * Deletes a note at a specific index.
+             * @param {number} index The index of the note to delete.
+             */
+            function deleteNote(index) {
+                let notes = loadNotes();
+                if (index > -1 && index < notes.length) {
+                    notes.splice(index, 1); // Remove the note
+                    saveNotes(notes); // Save updated notes
+                    renderNotes(); // Re-render the notes list
+                }
+            }
+
+            /**
+             * Handles adding a new note to the list.
+             */
+            addNoteBtn.addEventListener('click', () => {
+                const noteContent = noteInputArea.innerHTML.trim(); // Get HTML content
+
+                if (noteContent) {
+                    const notes = loadNotes();
+                    notes.unshift(noteContent); // Add new note to the beginning
+                    saveNotes(notes);
+                    noteInputArea.innerHTML = ''; // Clear the input area
+                    renderNotes(); // Re-render notes
+                } else {
+                    // Instead of alert, provide visual feedback
+                    noteInputArea.style.borderColor = '#ef4444'; // Red border
+                    noteInputArea.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.25)'; // Red shadow
+                    setTimeout(() => {
+                        noteInputArea.style.borderColor = '#d1d5db'; // Reset border
+                        noteInputArea.style.boxShadow = 'none'; // Reset shadow
+                    }, 1500);
+                }
+            });
+
+            /**
+             * Inserts an image into the contenteditable div at the current cursor position.
+             * @param {string} dataUrl The base64 data URL of the image.
+             */
+            function insertImageIntoContentEditable(dataUrl) {
+                const img = document.createElement('img');
+                img.src = dataUrl;
+                img.alt = 'Note Image';
+                img.style.maxWidth = '100%'; // Ensure image fits
+                img.style.height = 'auto'; // Maintain aspect ratio
+                img.style.display = 'block'; // Ensure it's on its own line
+                img.style.marginTop = '1rem'; // Add some spacing
+
+                // Get the current selection range
+                const selection = window.getSelection();
+                if (selection.rangeCount > 0) {
+                    const range = selection.getRangeAt(0);
+                    range.deleteContents(); // Delete any selected content
+                    range.insertNode(img); // Insert the image
+                    range.setStartAfter(img); // Move cursor after the image
+                    range.setEndAfter(img);
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                } else {
+                    // If no selection, just append the image
+                    noteInputArea.appendChild(img);
+                }
+
+                // Add a line break after the image for better typing experience
+                noteInputArea.appendChild(document.createElement('br'));
+            }
+
+            /**
+             * Handles image files (from drag/drop or paste) and inserts them.
+             * @param {File} file The image file object.
+             */
+            function handleImageFile(file) {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        insertImageIntoContentEditable(e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    console.warn("Non-image file dropped/pasted:", file.type);
+                }
+            }
+
+            // --- Drag and Drop functionality ---
+            noteInputArea.addEventListener('dragover', (e) => {
+                e.preventDefault(); // Prevent default to allow drop
+                e.stopPropagation();
+                noteInputArea.classList.add('border-blue-500', 'ring-2', 'ring-blue-300'); // Visual feedback
+            });
+
+            noteInputArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                noteInputArea.classList.remove('border-blue-500', 'ring-2', 'ring-blue-300'); // Remove visual feedback
+            });
+
+            noteInputArea.addEventListener('drop', (e) => {
+                e.preventDefault(); // Prevent default browser behavior (e.g., opening image)
+                e.stopPropagation();
+                noteInputArea.classList.remove('border-blue-500', 'ring-2', 'ring-blue-300'); // Remove visual feedback
+
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleImageFile(files[0]);
+                }
+            });
+
+            // --- Paste functionality ---
+            noteInputArea.addEventListener('paste', (e) => {
+                // Prevent default paste behavior to handle it manually
+                e.preventDefault();
+                e.stopPropagation();
+
+                const clipboardData = e.clipboardData;
+                let imageFound = false;
+
+                // Check for image files in clipboard
+                for (let i = 0; i < clipboardData.items.length; i++) {
+                    const item = clipboardData.items[i];
+                    if (item.type.startsWith('image/')) {
+                        const file = item.getAsFile();
+                        if (file) {
+                            handleImageFile(file);
+                            imageFound = true;
+                            break; // Only handle the first image found
+                        }
+                    }
+                }
+
+                // If no image was found, paste text content
+                if (!imageFound) {
+                    const text = clipboardData.getData('text/plain');
+                    document.execCommand('insertText', false, text);
+                }
+            });
+
+            // Initial render of notes when the page loads
+            renderNotes();
+        };
+    </script>
+</body>
+</html>
