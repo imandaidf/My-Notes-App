@@ -1,6 +1,6 @@
 # My Notes Web Application
 
-A simple and intuitive web-based notes application that allows users to create, view, and manage notes with rich text content, including the ability to embed images directly within the text. Notes are saved locally in the browser's storage for persistence.
+A simple and intuitive web-based notes application that allows users to create, view, and manage notes with rich text content, including the ability to embed images directly within the text. Notes are stored in the browser's localStorage for persistence.
 
 ## Features
 
@@ -11,6 +11,7 @@ A simple and intuitive web-based notes application that allows users to create, 
 - **Local Storage Persistence**: All your notes are automatically saved in your browser's `localStorage`, ensuring they remain available even after closing and reopening the browser.
 - **Dynamic Display**: Notes are rendered dynamically on the page as they are added, with the newest notes appearing at the top.
 - **Delete Notes**: Each note includes a "Delete" button for easy removal.
+- **Search Notes**: Instantly filter and search your notes by typing keywords into the search box at the top of the app.
 - **Responsive Design**: Styled with Tailwind CSS to provide a clean and responsive user interface across different device sizes.
 
 ## Technologies Used
@@ -44,12 +45,13 @@ To run this application locally:
   - **Paste**: Copy an image (e.g., a screenshot or an image from a website) and paste it into the "Add New Note" area using `Ctrl+V` (Windows/Linux) or `Cmd+V` (macOS).
 - **Saving a Note**: Click the "Add Note" button to save your current input as a new note.
 - **Deleting a Note**: Click the "Delete" button located at the bottom right of each note item to remove it.
+- **Searching Notes**: Use the search box in the header to filter notes by their content in real time.
 
 ## Future Enhancements
 
 - **Markdown Support**: Implement a Markdown parser to allow for more advanced text formatting.
 - **Note Editing**: Add functionality to edit existing notes after they have been saved.
-- **Search Functionality**: Allow users to search through their notes.
+- ~~**Search Functionality**: Allow users to search through their notes.~~ (Implemented)
 - **Categorization/Tags**: Enable organizing notes with categories or tags.
 - **Cloud Sync**: Integrate with a backend service (e.g., Firebase, Supabase) for cloud synchronization of notes, allowing access from multiple devices.
 - **Rich Text Editor Library**: Replace the basic `contenteditable` with a more feature-rich WYSIWYG editor library for advanced formatting options.
