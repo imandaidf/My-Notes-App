@@ -2,6 +2,10 @@
 
 A simple and intuitive web-based notes application that allows users to create, view, and manage notes with rich text content, including the ability to embed images directly within the text. Notes are stored in the browser's localStorage for persistence.
 
+## Screenshot
+
+![My Notes App Screenshot](Screenshot.png)
+
 ## Features
 
 - **Rich Text Editing**: Create notes with formatted text using a `contenteditable` area.
@@ -29,7 +33,7 @@ To run this application locally:
    - Then, you can either:
      - Clone your empty repository:  
        ```bash
-       git clone <your-repo-url>
+       git clone https://github.com/imandaidf/My-Notes-App.git
        ```
      - Or, simply create a new file named `index.html` (or `notes.html`) in a folder on your computer.
 
