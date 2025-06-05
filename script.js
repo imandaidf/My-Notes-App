@@ -6,6 +6,7 @@ window.onload = function() {
     const noNotesMessage = document.getElementById('noNotesMessage');
     const insertImageBtn = document.getElementById('insertImageBtn');
     const imageInput = document.getElementById('imageInput');
+    const searchInput = document.getElementById('searchInput');
 
     // When user clicks the image icon, open file dialog
     insertImageBtn.addEventListener('click', function() {
@@ -58,18 +59,28 @@ window.onload = function() {
     /**
      * Renders all notes from the loaded notes array into the DOM.
      */
-    function renderNotes() {
+    function renderNotes(searchTerm = '') {
         const notes = loadNotes();
         notesContainer.innerHTML = ''; // Clear existing notes
 
-        if (notes.length === 0) {
+        // Filter notes if searchTerm is provided
+        const filteredNotes = notes.filter(noteHtml =>
+            noteHtml.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+
+        // Find all matches, but keep their original index for delete
+        const filteredNotesWithIndex = notes
+        .map((noteHtml, idx) => ({ noteHtml, idx }))
+        .filter(({ noteHtml }) => noteHtml.toLowerCase().includes(searchTerm.toLowerCase()));
+
+
+        if (filteredNotesWithIndex.length === 0) {
             noNotesMessage.classList.remove('hidden');
         } else {
             noNotesMessage.classList.add('hidden');
-            notes.forEach((noteHtml, index) => {
+            filteredNotesWithIndex.forEach(({ noteHtml, idx }) => {
                 const noteDiv = document.createElement('div');
                 noteDiv.classList.add('note-item');
-                // Set innerHTML directly as notes can contain HTML (text and images)
                 noteDiv.innerHTML = noteHtml;
 
                 // Add a delete button to each note
@@ -81,13 +92,18 @@ window.onload = function() {
                     'transition', 'duration-200', 'ease-in-out', 'focus:outline-none',
                     'focus:ring-2', 'focus:ring-red-400', 'focus:ring-opacity-75'
                 );
-                deleteBtn.onclick = () => deleteNote(index);
+                deleteBtn.onclick = () => deleteNote(idx);
                 noteDiv.appendChild(deleteBtn);
 
                 notesContainer.appendChild(noteDiv);
             });
         }
+
     }
+
+    searchInput.addEventListener('input', (e) => {
+        renderNotes(e.target.value);
+    });
 
     /**
      * Deletes a note at a specific index.
