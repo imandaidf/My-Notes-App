@@ -4,6 +4,27 @@ window.onload = function() {
     const addNoteBtn = document.getElementById('addNoteBtn');
     const notesContainer = document.getElementById('notesContainer');
     const noNotesMessage = document.getElementById('noNotesMessage');
+    const insertImageBtn = document.getElementById('insertImageBtn');
+    const imageInput = document.getElementById('imageInput');
+
+    // When user clicks the image icon, open file dialog
+    insertImageBtn.addEventListener('click', function() {
+        imageInput.click();
+    });
+
+    // When user selects an image file
+    imageInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                insertImageIntoContentEditable(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+        // Reset the input so the same image can be selected again if desired
+        imageInput.value = '';
+    });
 
     // Key for storing notes in localStorage
     const NOTES_STORAGE_KEY = 'myNotesApp_notes';
