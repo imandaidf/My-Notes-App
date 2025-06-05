@@ -22,6 +22,21 @@
                 class="note-input-area w-full text-gray-700 text-lg focus:ring-2 focus:ring-blue-300 focus:border-blue-500"
                 placeholder="Type your note here or drag & drop an image..."
             ></div>
+
+            <!-- Insert Image Icon/Button and File Input START -->
+            <div class="flex items-center mt-2 mb-2">
+                <button id="insertImageBtn" type="button" title="Insert Image" class="p-2 rounded hover:bg-blue-100 focus:outline-none">
+                    <!-- You can use any icon, here is a sample SVG for an image icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <rect width="20" height="16" x="2" y="4" rx="2" fill="#93c5fd"/>
+                        <circle cx="8" cy="10" r="2" fill="#2563eb"/>
+                        <path d="M21 20l-5.5-7-4.5 6L3 12" stroke="#2563eb" stroke-width="2" fill="none"/>
+                    </svg>
+                </button>
+                <input type="file" id="imageInput" accept="image/*" style="display: none;" />
+            </div>
+            <!-- Insert Image Icon/Button and File Input END -->
+
             <button
                 id="addNoteBtn"
                 class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
