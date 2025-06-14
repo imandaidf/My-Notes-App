@@ -30,6 +30,26 @@ window.onload = function() {
     // Key for storing notes in localStorage
     const NOTES_STORAGE_KEY = 'myNotesApp_notes';
 
+    // --- Timestamp utility ---
+    function getFormattedTimestamp(date = new Date()) {
+        const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+        const dayName = days[date.getDay()];
+        const day = date.getDate();
+        const month = months[date.getMonth()];
+        const year = date.getFullYear();
+
+        let hour = date.getHours();
+        const minute = date.getMinutes().toString().padStart(2, '0');
+        const ms = date.getMilliseconds().toString().padStart(3, '0');
+        const ampm = hour >= 12 ? 'PM' : 'AM';
+        hour = hour % 12;
+        hour = hour ? hour : 12;
+
+        return `${dayName}, ${day} ${month} ${year}, ${hour}.${minute}.${ms} ${ampm}`;
+    }
+
     /**
      * Loads notes from localStorage.
      * @returns {Array<string>} An array of HTML strings representing notes.
@@ -128,8 +148,16 @@ window.onload = function() {
         const noteContent = noteInputArea.innerHTML.trim(); // Get HTML content
 
         if (noteContent) {
+            const timestamp = getFormattedTimestamp();
+            // Add timestamp to the note content (displayed at the bottom)
+            const noteWithTimestamp = `
+                <div>${noteContent}</div>
+                <div class="text-xs text-gray-500 mt-2" style="font-size:0.85em; color:#6b7280; margin-top:0.5em;">
+                    <span>${timestamp}</span>
+                </div>
+            `;
             const notes = loadNotes();
-            notes.unshift(noteContent); // Add new note to the beginning
+            notes.unshift(noteWithTimestamp); // Add new note to the beginning
             saveNotes(notes);
             noteInputArea.innerHTML = ''; // Clear the input area
             renderNotes(); // Re-render notes
