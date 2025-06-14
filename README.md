@@ -14,6 +14,8 @@ A simple and intuitive web-based notes application that allows users to create, 
   - **Paste Images**: Paste images from your clipboard (e.g., screenshots, copied images from websites) directly into the note input.
 - **Local Storage Persistence**: All your notes are automatically saved in your browser's `localStorage`, ensuring they remain available even after closing and reopening the browser.
 - **Dynamic Display**: Notes are rendered dynamically on the page as they are added, with the newest notes appearing at the top.
+- **Timestamp on Creation**: Each note now displays a creation timestamp in the format:  
+  `Saturday, 14 Jun 2025, 9.06.123 PM`
 - **Delete Notes**: Each note includes a "Delete" button for easy removal.
 - **Search Notes**: Instantly filter and search your notes by typing keywords into the search box at the top of the app.
 - **Responsive Design**: Styled with Tailwind CSS to provide a clean and responsive user interface across different device sizes.
@@ -47,7 +49,9 @@ To run this application locally:
 - **Inserting an Image**:
   - **Drag & Drop**: Drag an image file from your desktop or file explorer and drop it into the "Add New Note" area.
   - **Paste**: Copy an image (e.g., a screenshot or an image from a website) and paste it into the "Add New Note" area using `Ctrl+V` (Windows/Linux) or `Cmd+V` (macOS).
-- **Saving a Note**: Click the "Add Note" button to save your current input as a new note.
+- **Saving a Note**: Click the "Add Note" button to save your current input as a new note.  
+  The note will display a timestamp at the bottom in the format:  
+  `Saturday, 14 Jun 2025, 9.06.123 PM`
 - **Deleting a Note**: Click the "Delete" button located at the bottom right of each note item to remove it.
 - **Searching Notes**: Use the search box in the header to filter notes by their content in real time.
 
@@ -62,4 +66,4 @@ To run this application locally:
 
 ## License
 
-This project is open source and available under the [MIT License](https://opensource.org/licenses/MIT). 
+This project is open source and available under the [MIT License](https://opensource.org/licenses/MIT).
